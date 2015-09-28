@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import com.photo.grap.photograp.component.FileTasker;
