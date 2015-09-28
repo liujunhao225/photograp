@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FileUpload Test</title>
+<link rel="stylesheet" href="/resource/style/jquery.fileupload.css">
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script src="/resource/js/jquery.ui.widget.js"></script>
+<script src="/resource/js/jquery.fileupload.js"></script>
+<style type="text/css">
+.fileinput-button input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	opacity: 0;
+	-ms-filter: 'alpha(opacity=0)';
+	font-size: 200px;
+	direction: ltr;
+	cursor: pointer;
+}
+
+.btn-success {
+	background-color: #5cb85c;
+	border-color: #5cb85c;
+	color: #fff;
+}
+
+.btn-success:hover {
+	color: #fff;
+	background-color: #449d44;
+	border-color: #398439;
+}
+
+.btn {
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+	<span class="btn btn-success fileinput-button"> <i
+		class="glyphicon glyphicon-plus"></i> <span>上传文件</span> <!-- The file input field used as target for the file upload widget -->
+		<input id="fileupload" type="file" name="files" multiple>
+	</span>
+	<script>
+		/*jslint unparam: true */
+		/*global window, $ */
+		$(function() {
+			$('#fileupload').fileupload(
+					{
+						url : '/fupload',
+						dataType : 'json',
+						formData :[{
+							'param1':$(this).parent.html();
+						}]
+						progressall : function(e, data) {
+							console.log("开始");
+							var progress = parseInt(data.loaded / data.total
+									* 100, 10);
+							$('#progress .progress-bar').css('width',
+									progress + '%');
+						}
+					}).prop('disabled', !$.support.fileInput).parent()
+					.addClass($.support.fileInput ? undefined : 'disabled');
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>任务列表页面</title>
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script src="/resource/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+<script src="/resource/js/grid.locale-en.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/resource/style/ui.jqgrid.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/resource/style/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/resource/style/jsgrid.min.css" />
+<style type="text/css">
+.menucls {
+	margin-right: 20px;
+	display: inline-block;
+	height: 30px;
+	width: 50px;
+	border: 1px solid #fff;
+	background-color: #77d5f7;
+	line-height: 30px;
+	text-decoration: none;
+}
+
+.homeMenu {
+	text-decoration: none;
+	font-size: 20px;
+	display: block;
+	height: 30px;
+	width: 50px;
+	line-height: 30px;
+	margin-bottom:20px;
+}
+</style>
+</head>
+<body>
+	<a href="/index.html" class="homeMenu">首页</a>
+	<table id="jqGrid"></table>
+	<div id="jqGridPager"></div>
+	<script type="text/javascript">
+		function redirectToPhotoList(node) {
+			$(node).parent().click();
+			var grid = $("#jqGrid");
+			var currentPage = $(".ui-pg-input").val();
+			var rowKey = grid.jqGrid('getGridParam', "selrow");
+
+			window.location.href = '/task_photo_list.html?taskId=' + rowKey;
+		}
+
+		function stateFormatter(cellValue, options, cellObject) {
+			if ("A" == cellValue) {
+				return "下载中"
+			} else if ("B" == cellValue) {
+				return "图片采集完";
+			} else if ("C" == cellValue) {
+				return "可下载";
+			} else if ("D" == cellValue) {
+				return "文件生成中";
+			} else if ("E" == cellValue) {
+				return '文件生成错误 ，需重新生成'
+			} else {
+				return "状态出错,请联系管理员";
+			}
+		}
+		function makeExcel(node) {
+			$(node).parent().click();
+			var grid = $("#jqGrid");
+			var currentPage = $(".ui-pg-input").val();
+			var rowKey = grid.jqGrid('getGridParam', "selrow");
+			jQuery.ajax({
+				url : '/excelmaker.do',
+				data : {
+					'taskId' : rowKey
+				},
+				success : function(responsedata) {
+				}
+			});
+
+		}
+
+		function downloadFile(node) {
+			$(node).parent().click();
+			var grid = $("#jqGrid");
+			var currentPage = $(".ui-pg-input").val();
+			var rowKey = grid.jqGrid('getGridParam', "selrow");
+			jQuery.ajax({
+				url : '/fdownload.do',
+				data : {
+					'taskId' : rowKey
+				},
+				success : function(responsedata) {
+					var obj = JSON.parse(responsedata);
+					console.log(obj.flag);
+					if (obj.flag == true) {
+						console.log(obj.fileName);
+						$(node).attr("href",
+								"/resource/download/" + obj.fileName);
+						$(node).attr("download", "" + obj.fileName);
+					} else {
+						alert("图片正在下载中");
+					}
+				}
+			});
+		}
+
+		function menuFormatter(cellValue, options, cellObject) {
+
+			//查看图片连接
+			var photoUrl = "<a class='menucls' href='###' onClick='redirectToPhotoList(this);'>查看图片</a>";
+			//生成文件连接
+			var makeFileUrl = "<a class='menucls' href='###' onClick='makeExcel(this);'>生成文件</a> ";
+			//下载文件连接
+			var downloadUrl = "<a class='menucls' href='###' onClick='downloadFile(this);'>下载文件</a>";
+
+			if ("A" == cellValue || "D" == cellValue) {
+				return "不可操作"
+			} else if ("B" == cellValue) {
+				return photoUrl + makeFileUrl;
+			} else if ("C" == cellValue) {
+				return photoUrl + makeFileUrl + downloadUrl;
+			} else if ("E" == cellValue) {
+				return photoUrl + makeFileUrl;
+			} else {
+				return "";
+			}
+		}
+
+		$("#jqGrid").jqGrid({
+			url : '/taskList.do',
+			mtype : "GET",
+			datatype : "json",
+			colModel : [ {
+				label : '任务编号',
+				name : 'taskId',
+				key : true,
+				width : 50
+			}, {
+				label : '任务名称',
+				name : 'fileName',
+				width : 150
+			}, {
+				label : '状态',
+				name : 'taskState',
+				width : 100,
+				'formatter' : stateFormatter
+			}, {
+				label : '开始时间',
+				name : 'startTime',
+				width : 100
+			}, {
+				label : '结束时间',
+				name : 'endTime',
+				width : 100
+			}, {
+				label : '操作',
+				name : 'taskState',
+				width : 260,
+				'formatter' : menuFormatter
+			} ],
+			viewrecords : true,
+			width : 700,
+			height : 500,
+			rowNum : 50,
+			pager : "#jqGridPager"
+		});
+	</script>
+</body>
+</html>

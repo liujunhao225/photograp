@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>下载页面</title>
+<script type="text/javascript" src="/resource/js/jquery-1.11.3.min.js"></script>
+
+</head>
+<body>
+	<select id="myDiv">
+
+	</select>
+	<a id="downloadButton"  href="#" >下载</a>
+</body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		htmlobj = $.ajax({
+			url : "/downloadFile/list",
+			async : false
+		});
+		$("#myDiv").html(htmlobj.responseText);
+	});
+
+	$("#downloadButton").click(function() {
+		var fileName = $("#myDiv").val();
+		downloadFileObj = $.ajax({
+			url : "/fdownload/download",
+			data : {
+				'fileName' : fileName
+			},
+			dataType:'json',
+			async : false
+		});
+		var obj= JSON.parse(downloadFileObj.responseText);
+		console.log(obj.flag);
+		if(obj.flag==true){
+			console.log(obj.fileName);
+			$("#downloadButton").attr("href","/resource/download/"+obj.fileName);
+			$("#downloadButton").attr("download",""+obj.fileName);
+		}
+		else{
+			alert("图片正在下载中");
+		}
+		
+// 		console.log(downloadFileObj.responseText);
+	});
+</script>
+</html>

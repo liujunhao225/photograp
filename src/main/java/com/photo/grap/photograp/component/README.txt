@@ -1,0 +1,1 @@
+﻿1、所有监听任务启动时加载，加载类AllTaskerSwitch

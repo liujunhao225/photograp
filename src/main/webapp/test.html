@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试grid</title>
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script src="/resource/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+<script src="/resource/js/grid.locale-en.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/resource/style/ui.jqgrid.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/resource/style/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="/resource/style/jsgrid.min.css" />
+<script type="text/javascript">
+	function checkBoxClick12(node){
+			var selectValue=$(node).val(); 
+			$(node).parent().click();
+ 		  	var grid = $("#jqGrid");
+ 		  	var currentPage = $(".ui-pg-input").val();
+           	var rowKey = grid.jqGrid('getGridParam',"selrow");
+           	if (rowKey){
+               console.log("Selected row primary key is: " + rowKey);
+              	$.ajax({
+              		url:"/photedit",
+              		data:{'pictureId':rowKey,'selectCheckBox':selectValue},
+              		async:false,
+              		success:function(){
+              			jQuery("#jqGrid").jqGrid('setGridParam', {
+              		         page : currentPage
+              		        }).trigger('reloadGrid');
+              		}
+              	});
+           	}
+            else
+           	   console.log("No rows are selected");
+ 		} 
+	</script>
+</head>
+<body>
+	<table id="jqGrid"></table>
+	<div id="jqGridPager"></div>
+	<script type="text/javascript"> 
+
+    	 function formatImage(cellValue, options, rowObject) {
+    		 	if(cellValue !=null &&　cellValue !=''){
+		          	 var imageHtml = "<img src='/resource/images/" + cellValue + "' originalValue='" + cellValue + "' style='height:100px;width:100px;' />";
+		        	 return imageHtml;
+    		 	}
+    		 	return '';
+		  }
+    	 function checkBoxClick(){
+   		  	 var grid = $("#jqGrid");
+             var rowKey = grid.jqGrid('getGridParam',"selrow");
+             if (rowKey)
+                 console.log("Selected row primary key is: " + rowKey);
+             else
+             	console.log("No rows are selected");
+  	 	}
+    	 
+    	 function unformatImage(cellValue, options, cellObject) {
+    	       return $(cellObject.html()).attr("originalValue");
+    	 }
+    	 function formatCheck(cellValue, options, cellObject){
+    		 var html = "<input type='checkbox' name='selectImg' onclick='javascript:checkBoxClick12(this);' value='1'/>1<br/>"
+    					 +"<input type='checkbox' name='selectImg'  onclick='javascript:checkBoxClick12(this);' value='2' />2<br/>"
+    					 +"<input type='checkbox' name='selectImg'  onclick='javascript:checkBoxClick12(this);' value='3'/>3";
+    		 return html;
+    	 }
+        $("#jqGrid").jqGrid({
+            url: '/photo',
+            mtype: "GET",
+            datatype: "json",
+            colModel: [
+                { label: '商品号', name: 'id', key: true, width: 150 },
+                { label: '被选择图片', name: 'selectPhoto', width: 100 ,'formatter':formatImage,'unformat':unformatImage,'editable':true},
+                { label: '图片1', name: 'photoUrl1', width: 100,'formatter':formatImage,'unformat':unformatImage,'editable':true},
+                { label: '图片2', name: 'photoUrl2', width: 100,'formatter':formatImage,'unformat':unformatImage,'editable':true },
+                { label:'图片3', name: 'photoUrl3', width: 100,'formatter':formatImage,'unformat':unformatImage,'editable':true },
+                { label:'选择图片',name:'',width:100,'formatter':formatCheck}
+            ],
+			viewrecords: true,
+            width: 1500,
+            height: 800,
+            rowNum:15,
+            pager: "#jqGridPager"
+        });
+        
+   </script>
+</body>
+</html>
