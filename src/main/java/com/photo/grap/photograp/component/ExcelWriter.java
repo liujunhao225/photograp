@@ -44,11 +44,13 @@ public class ExcelWriter {
 //					SystemConfig.SAVE_FILE_PATH + fileName));
 			workbook =  new XSSFWorkbook(OPCPackage.open(SystemConfig.SAVE_FILE_PATH + fileName));
 			Sheet sheet = workbook.getSheetAt(0);
-			sheet.setDefaultRowHeight((short) 1000);
+			sheet.setDefaultRowHeight((short) 2500);
+//			sheet.setDefaultColumnWidth(2000);
 			int maxRowNum = sheet.getLastRowNum();
 			int columnCount = sheet.getRow(0).getLastCellNum();
 			sheet.getRow(0).createCell(columnCount);
-			sheet.getRow(0).getCell(columnCount).setCellValue("photo");
+			sheet.getRow(0).getCell(columnCount).setCellValue("照 片 样 例（双击改变列宽）");
+//			sheet.getRow(0).getCell(columnCount).setCellStyle(Cell.VERTICAL_CENTER);
 			sheet.getRow(0).getCell(columnCount).getCellStyle()
 					.setVerticalAlignment(CellStyle.VERTICAL_BOTTOM);
 			sheet.getRow(0).createCell(columnCount + 1, Cell.CELL_TYPE_STRING);

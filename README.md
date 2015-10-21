@@ -1,3 +1,3 @@
-# learngit
+#注意事项
+(1)、上传文件
 
-Readme frist.
