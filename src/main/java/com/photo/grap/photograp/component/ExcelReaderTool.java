@@ -34,7 +34,7 @@ public class ExcelReaderTool {
 				wb = WorkbookFactory.create(file);
 				Sheet sheet = wb.getSheetAt(0);
 				int maxRowIndex = sheet.getLastRowNum();
-				for (int i = 1; i < maxRowIndex; i++) {
+				for (int i = 1; i <=maxRowIndex; i++) {
 					Row tempRow = sheet.getRow(i);
 					Cell tempCell = tempRow.getCell(0);
 					if (tempCell == null)
@@ -44,6 +44,7 @@ public class ExcelReaderTool {
 					String value = tempCell.getStringCellValue();
 					strList.add(value);
 				}
+				logger.info("【解析文件】解析excel结束");
 			} catch (InvalidFormatException e) {
 				logger.error("【解析文件】excel格式不正确");
 				e.printStackTrace();

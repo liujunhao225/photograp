@@ -2,6 +2,8 @@ package com.photo.grap.photograp.component;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.minidev.json.JSONObject;
 
 import com.photo.grap.photograp.util.MysqlConnector;
@@ -9,6 +11,8 @@ import com.photo.grap.photograp.util.SystemConfig;
 
 
 public class FileMarkerTasker extends Thread {
+	
+	private static Logger logger = Logger.getLogger(FileMarkerTasker.class);
 
 	@Override
 	public void run() {
@@ -26,13 +30,10 @@ public class FileMarkerTasker extends Thread {
 
 				List<JSONObject> tasks = MysqlConnector.getFileList(SystemConfig.TASK_INIT);
 				for (JSONObject task : tasks) {
-					// File file = new
-					// File(SystemConfig.DOWNLOAD_FILE_PATH+fileName);
-					// if(file.exists()){
+					logger.info("【下载图片完成后】更新任务状态为已下载--开始");
 					MysqlConnector.updateTask(task.getAsString("taskId"),SystemConfig.TASK_FINISHED_DOWNLOAD);
-					// }else{
-					// ExcelWriter.makeExcel(fileName);
-					// }
+					logger.info("【下载图片完成后】更新任务状态为已下载--结束");
+				
 				}
 			} else {
 			}
