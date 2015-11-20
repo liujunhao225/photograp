@@ -32,6 +32,9 @@ public class ClawerTasker {
 						if (picture1 == null || "".equals(picture1.toString())) {
 							logger.info("【抓取任务】开始抓取ID:" + productId);
 							pictures = TaoBaoPictureTool.getPicture(productId);
+							if(pictures ==null){
+								continue;
+							}
 							logger.info("【抓取任务】完成抓取ID:" + productId);
 							boolean existFlag = false;
 							for (String ss : pictures) {
@@ -51,7 +54,6 @@ public class ClawerTasker {
 								}
 							}
 						}
-						Thread.sleep(5000);
 					}
 				} catch (InterruptedException e) {
 					logger.error("【抓取任务】产品号:" + productId + "出现异常");

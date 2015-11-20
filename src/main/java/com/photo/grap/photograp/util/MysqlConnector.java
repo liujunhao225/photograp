@@ -12,9 +12,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.minidev.json.JSONObject;
 
 public class MysqlConnector {
+	
+	private static Logger logger = Logger.getLogger(MysqlConnector.class);
 	static Connection conn = null;
 	static {
 		try {
@@ -45,7 +49,6 @@ public class MysqlConnector {
 			try {
 				statement.executeUpdate(sql);
 			} catch (SQLException e) {
-				System.err.println("插入语句错误");
 				e.printStackTrace();
 			} finally {
 				try {
@@ -496,6 +499,87 @@ public class MysqlConnector {
 
 	}
 
+	/**
+	 * 向proxyIp表插入数据
+	 * 
+	 * @param id
+	 */
+	public static void insertProxyIpPort(List<String> proxyIpPortList ) {
+		
+		if(proxyIpPortList.size()<1){
+			return ;
+		}
+		String sql = "INSERT INTO tb_proxy_ip_port (ip,PORT) values ";
+		StringBuilder sb = new StringBuilder();
+		for(String ss:proxyIpPortList){
+			String temp[] = ss.trim().split("\\s");
+			sb.append("('"+temp[0]+"',"+temp[1]+"),");
+		}
+		String  endSQL = sb.substring(0, sb.toString().length()-1);
+		sql = sql+endSQL;
+		logger.info("sql语句是"+sql);
+		Statement st = getStatement();
+		try {
+			st.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				st.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 向proxyIp表插入数据
+	 * 
+	 * @param id
+	 */
+	public static void truncateProxyIp( ) {
+		
+		logger.info("清空代理 表数据开始");
+		Statement st = getStatement();
+		try {
+			st.execute("TRUNCATE tb_proxy_ip_port");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				st.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		logger.info("清空代理 表数据结束");
+	}
+	public static List<JSONObject> getProxyIP(){
+		List<JSONObject> jobList = new ArrayList<JSONObject>();
+		logger.info("获取代理ip");
+		String sql = "select ip,port from tb_proxy_ip_port ";
+		Statement st = getPrepareStatement(sql);
+		try {
+			ResultSet rs = st.executeQuery(sql);
+			while(rs.next()){
+				JSONObject job = new JSONObject();
+				String ip= rs.getString("ip");
+				String port = rs.getString("port");
+				job.put("ip",ip);
+				job.put("port",port);
+				jobList.add(job);
+			}
+			return jobList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+		
+	}
 	private static PreparedStatement getPrepareStatement(String sql) {
 
 		try {
@@ -510,6 +594,8 @@ public class MysqlConnector {
 			return null;
 		}
 	}
+	
+	
 
 	private static Statement getStatement() {
 		Statement statement = null;

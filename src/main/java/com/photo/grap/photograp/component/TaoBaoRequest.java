@@ -1,8 +1,12 @@
 package com.photo.grap.photograp.component;
 
 import java.io.BufferedReader;
+import java.util.List;
+import java.util.Random;
 import java.io.IOException;
 import java.io.StringReader;
+
+import net.minidev.json.JSONObject;
 
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -14,27 +18,29 @@ import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
+import com.photo.grap.photograp.util.MysqlConnector;
+
 public class TaoBaoRequest {
 	static String url = "https://s.taobao.com/search?q=%s";
 
 	private static Logger logger = Logger.getLogger(TaoBaoRequest.class);
 
+	private static List<JSONObject> proxyList = MysqlConnector.getProxyIP();
 	protected static String getPhotoUrl(String param) {
 
 		// 设置代理
-//		String proxyParams[] = getProxyConfig();
-//		HttpHost proxy = new HttpHost(proxyParams[0], Integer.parseInt(proxyParams[1]));
-//		DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(
-//				proxy);
-//		CloseableHttpClient client = HttpClients.custom()
-//				.setRoutePlanner(routePlanner).build();
-		CloseableHttpClient client = HttpClients.createDefault();
+		String proxyParams[] = getProxyConfig();
+		HttpHost proxy = new HttpHost(proxyParams[0], Integer.parseInt(proxyParams[1]));
+		DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(
+				proxy);
+		CloseableHttpClient client = HttpClients.custom()
+				.setRoutePlanner(routePlanner).build();
+//		CloseableHttpClient client = HttpClients.createDefault();
 		// BasicConfigurator.configure();
 		String tempUrl = String.format(url, param);
 		HttpGet get = new HttpGet(tempUrl);
 		get.addHeader(":host", "s.taobao.com");
 		get.addHeader(":method", "GET");
-		get.addHeader(":path", "/search?q=544976-014");
 		get.addHeader("accept",
 				"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
 		// get.addHeader("accept-encoding", "gzip, deflate, sdch");
@@ -51,27 +57,31 @@ public class TaoBaoRequest {
 		StringReader sreader = null;
 		try {
 			HttpResponse resposne = client.execute(get);
-			String result = EntityUtils.toString(resposne.getEntity(), "utf-8");
-			sreader = new StringReader(result);
-			BufferedReader breader = new BufferedReader(sreader);
-			String line = "";
-			while ((line = breader.readLine()) != null) {
-				if (line.contains("g_page_config ")) {
-					line = line.trim();
-					returnBack = line.substring(line.indexOf("=") + 1,
-							line.length() - 1);
-					break;
+			if(resposne.getStatusLine().getStatusCode() ==200){
+				String result = EntityUtils.toString(resposne.getEntity(), "utf-8");
+				sreader = new StringReader(result);
+				BufferedReader breader = new BufferedReader(sreader);
+				String line = "";
+				while ((line = breader.readLine()) != null) {
+					if (line.contains("g_page_config ")) {
+						line = line.trim();
+						returnBack = line.substring(line.indexOf("=") + 1,
+								line.length() - 1);
+						break;
+					}
 				}
+				
 			}
+			
 		} catch (ClientProtocolException e) {
-			logger.error("【采集网页】客户端异常");
-			e.printStackTrace();
+			logger.error("【采集网页】客户端异常:"+tempUrl);
+//			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("【采集网页】IO异常");
-			e.printStackTrace();
+			logger.error("【采集网页】IO异常:"+tempUrl);
+//			e.printStackTrace();
 		} catch (Exception e) {
-			logger.error("【采集网页】未处理异常");
-			e.printStackTrace();
+			logger.error("【采集网页】未处理异常:"+tempUrl);
+//			e.printStackTrace();
 		} finally {
 			if (sreader != null) {
 				sreader.close();
@@ -91,9 +101,10 @@ public class TaoBaoRequest {
 	}
 
 	private static String[] getProxyConfig() {
-		String ss[] = {};
-		return ss;
-
+		Random rnd = new Random();
+		int randInt = rnd.nextInt(proxyList.size());
+		String params[] ={proxyList.get(randInt).getAsString("ip"),proxyList.get(randInt).getAsString("port")};
+		return params;
 	}
 
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>代理ip设置</title>
+<script type="text/javascript" src="/resource/js/dropzone.js?20150826"></script>
+<link style="text/css" href="/resource/style/dropzone.css?20150826">
+<style type="text/css">
+.dropzone {
+	border: 2px dashed #0087F7;
+	border-radius: 5px;
+	background: #fff;
+	min-height: 150px;
+	padding: 54px 54px;
+	width: 300px;
+}
+.homeMenu {
+	text-decoration: none;
+	font-size: 20px;
+	display: block;
+	height: 30px;
+	width: 50px;
+	line-height: 30px;
+	margin-bottom:20px;
+}
+</style>
+</head>
+<body>
+<a href="/index.html" class="homeMenu">首页</a>
+	<div id="mydropzone" class="dropzone">
+	</div>
+</body>
+<script type="text/javascript">
+	Dropzone.autoDiscover = false;
+	var myDropzone = new Dropzone("#mydropzone", {
+		dictDefaultMessage:'选择文件上传',
+		url : '/proxyIp.do',
+		init : function() {
+			console.log("init");
+		},
+		dragstart : function() {
+			console.log("dragstart");
+		},
+		dragend : function() {
+			console.log("dragend");
+		},
+		dragenter : function() {
+			console.log("dragenter");
+		},
+		dragover : function() {
+			console.log("dragover");
+		},
+		dragleave : function() {
+			console.log("dragenter");
+		}
+	});
+</script>
+</html>

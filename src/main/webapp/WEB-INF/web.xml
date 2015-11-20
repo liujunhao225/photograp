@@ -70,6 +70,15 @@
 	    <servlet-name>excelmaker</servlet-name>
 		<url-pattern>/excelmaker.do</url-pattern>
 	</servlet-mapping>
+	<!-- 配置代理 Ip -->
+	<servlet>
+	    <servlet-name>proxyIp</servlet-name>
+	    <servlet-class>com.action.ProxyIpSettingServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>proxyIp</servlet-name>
+		<url-pattern>/proxyIp.do</url-pattern>
+	</servlet-mapping>
 	
 	<!-- 扫描任务开关 -->
 	<servlet>

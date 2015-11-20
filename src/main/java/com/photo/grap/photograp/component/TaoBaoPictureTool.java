@@ -18,6 +18,9 @@ public class TaoBaoPictureTool {
 				.deal(TaoBaoRequest.getPhotoUrl(param));
 		String[] results = new String[50];
 		int index = 0;
+		if(productList ==null ||productList.size()<1){
+			return null;
+		}
 		for (Map<String, Object> map : productList) {
 			String title = Jsoup.parse(map.get("title").toString()).text();
 			String raw_title = map.get("raw_title").toString();
