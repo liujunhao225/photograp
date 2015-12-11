@@ -24,9 +24,7 @@ import com.photo.grap.photograp.util.MysqlConnector;
 import com.photo.grap.photograp.util.SystemConfig;
 
 public class DouploadServlet extends HttpServlet {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(DouploadServlet.class
 			.getName());
@@ -67,11 +65,10 @@ public class DouploadServlet extends HttpServlet {
 					in.close();
 					item.delete();
 					MysqlConnector.insertFileTask(filename,SystemConfig.TASK_INIT);
-					
 				}
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 		// 解析文件
 		FileTasker.addFile(filename);

@@ -17,7 +17,6 @@ public class ClawerTasker {
 	private static Logger logger = Logger.getLogger(ClawerTasker.class);
 
 	public class Handler extends Thread {
-
 		public void run() {
 			logger.info("启动抓取任务*****");
 			while (true) {
@@ -43,9 +42,6 @@ public class ClawerTasker {
 									break;
 								}
 							}
-							if("709009-664".equals(productId)){
-								System.out.println("**********************");
-							}
 							if (existFlag) {
 								
 								if (pictures != null && pictures.length > 0) {
@@ -55,6 +51,7 @@ public class ClawerTasker {
 							}
 						}
 					}
+					sleep(10*1000);
 				} catch (InterruptedException e) {
 					logger.error("【抓取任务】产品号:" + productId + "出现异常");
 				}
