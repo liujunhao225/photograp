@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.minidev.json.JSONObject;
 
-import com.photo.grap.photograp.component.ExcelWriter;
+import com.photo.grap.photograp.tool.ExcelWriterTool;
 import com.photo.grap.photograp.util.MysqlConnector;
 import com.photo.grap.photograp.util.SystemConfig;
 
@@ -24,7 +24,7 @@ public class MakeFileServlet extends HttpServlet {
 		MysqlConnector.updateTask(taskId, SystemConfig.TASK_FILE_MAKING);
 
 		if (fileName != null && fileName.length() > 0) {
-			String result = ExcelWriter.makeExcel(fileName);
+			String result = ExcelWriterTool.makeExcel(fileName);
 			if (result.length() < 1) {
 				MysqlConnector.updateTask(taskId,
 						SystemConfig.TASK_FILE_MAKING_ERROR);

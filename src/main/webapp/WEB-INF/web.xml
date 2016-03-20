@@ -1,93 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5">
-
-	<!-- 上传文件 -->
-	<servlet>
-		<servlet-name>fupload</servlet-name>
-		<servlet-class>com.action.DouploadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>fupload</servlet-name>
-		<url-pattern>/fupload/*</url-pattern>
-	</servlet-mapping>
-	
-	<!-- 配置图片 -->
-	<servlet>
-		<servlet-name>imgupload</servlet-name>
-		<servlet-class>com.action.ImageAddServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>imgupload</servlet-name>
-		<url-pattern>/imgupload.do</url-pattern>
-	</servlet-mapping>
-	<!-- 下载文件 -->
-	<servlet>
-		<servlet-name>fdownload</servlet-name>
-		<servlet-class>com.action.DodownloadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>fdownload</servlet-name>
-		<url-pattern>/fdownload.do</url-pattern>
-	</servlet-mapping>
-	<!-- 下载文件列表 -->
-	<servlet>
-		<servlet-name>taskList</servlet-name>
-		<servlet-class>com.action.TaskListServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>taskList</servlet-name>
-		<url-pattern>/taskList.do</url-pattern>
-	</servlet-mapping>
-
-	<!-- 图片管理列表 -->
-	<servlet>
-		<servlet-name>photoList</servlet-name>
-		<servlet-class>com.action.PictureListServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>photoList</servlet-name>
-		<url-pattern>/photo/*</url-pattern>
-	</servlet-mapping>
-	<!-- 图片管理编辑 -->
-	<servlet>
-		<servlet-name>photedit</servlet-name>
-		<servlet-class>com.action.PictureSelectedServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>photedit</servlet-name>
-		<url-pattern>/photedit/*</url-pattern>
-	</servlet-mapping>
-	
-	<!-- excel生成 -->
-	<servlet>
-	    <servlet-name>excelmaker</servlet-name>
-	    <servlet-class>com.action.MakeFileServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-	    <servlet-name>excelmaker</servlet-name>
-		<url-pattern>/excelmaker.do</url-pattern>
-	</servlet-mapping>
-	<!-- 配置代理 Ip -->
-	<servlet>
-	    <servlet-name>proxyIp</servlet-name>
-	    <servlet-class>com.action.ProxyIpSettingServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-	    <servlet-name>proxyIp</servlet-name>
-		<url-pattern>/proxyIp.do</url-pattern>
-	</servlet-mapping>
-	
-	<!-- 扫描任务开关 -->
-	<servlet>
-		<servlet-name>taskSwitch</servlet-name>
-		<servlet-class>com.photo.grap.photograp.component.AllTaskerSwitch</servlet-class>
-		<load-on-startup>5</load-on-startup>
-	</servlet>
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <servlet>
+    <servlet-name>fupload</servlet-name>
+    <servlet-class>com.action.DouploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>fupload</servlet-name>
+    <url-pattern>/fupload/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>imgupload</servlet-name>
+    <servlet-class>com.action.ImageAddServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>imgupload</servlet-name>
+    <url-pattern>/imgupload.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>fdownload</servlet-name>
+    <servlet-class>com.action.DodownloadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>fdownload</servlet-name>
+    <url-pattern>/fdownload.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>taskList</servlet-name>
+    <servlet-class>com.action.TaskListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>taskList</servlet-name>
+    <url-pattern>/taskList.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>photoList</servlet-name>
+    <servlet-class>com.action.PictureListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>photoList</servlet-name>
+    <url-pattern>/photo/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>photedit</servlet-name>
+    <servlet-class>com.action.PictureSelectedServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>photedit</servlet-name>
+    <url-pattern>/photedit/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>excelmaker</servlet-name>
+    <servlet-class>com.action.MakeFileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>excelmaker</servlet-name>
+    <url-pattern>/excelmaker.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>uploadNeedDownload</servlet-name>
+    <servlet-class>com.action.UploadNeedDownloadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>uploadNeedDownload</servlet-name>
+    <url-pattern>/uploadNeedDownload.do</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>taskSwitch</servlet-name>
+    <servlet-class>com.photo.grap.photograp.manage.AllTaskerSwitch</servlet-class>
+    <load-on-startup>5</load-on-startup>
+  </servlet>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
 </web-app>

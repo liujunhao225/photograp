@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.photo.grap.photograp.util.MysqlConnector;
 
 import net.minidev.json.JSONObject;
@@ -17,6 +19,8 @@ public class PictureListServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 2727916780354520667L;
+	
+	private static final Logger logger = Logger.getLogger(PictureListServlet.class);
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
@@ -25,6 +29,12 @@ public class PictureListServlet extends HttpServlet {
 		String page = request.getParameter("page");
 		
 		String taskId = request.getParameter("taskId");
+		
+		String state = request.getParameter("state");
+		
+		String productid = request.getParameter("productid");
+		
+		logger.info("state is "+state);
 		
 		int pageInt = 0;
 		int pageSizeInt = 0;
@@ -35,8 +45,8 @@ public class PictureListServlet extends HttpServlet {
 			pageInt = 0;
 			pageSizeInt = 15;
 		}
-		List<JSONObject> listjob = MysqlConnector.getPhotolist(taskId,pageSizeInt, pageInt);
-		int count = MysqlConnector.getListCount(taskId);
+		List<JSONObject> listjob = MysqlConnector.getPhotolist(pageSizeInt, pageInt,productid,state);
+		int count = MysqlConnector.getListCount(productid,state);
 
 		int totalPage = (int) Math.ceil(count / (double)pageSizeInt);
 		JSONObject job = new JSONObject();
@@ -49,7 +59,6 @@ public class PictureListServlet extends HttpServlet {
 			try {
 				response.getWriter().write(job.toString());
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}

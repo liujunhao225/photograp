@@ -19,26 +19,24 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
-import com.photo.grap.photograp.component.FileTasker;
+import com.photo.grap.photograp.tasker.FileTasker;
+import com.photo.grap.photograp.tool.ExcelReaderTool;
 import com.photo.grap.photograp.util.MysqlConnector;
 import com.photo.grap.photograp.util.SystemConfig;
 
 public class DouploadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(DouploadServlet.class
-			.getName());
+	private static Logger logger = Logger.getLogger(DouploadServlet.class.getName());
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		logger.info("记录日志");
 		logger.info("测试 记录");
 		// 保存文件
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-		ServletContext servletContext = this.getServletConfig()
-				.getServletContext();
-		File repository = (File) servletContext
-				.getAttribute("javax.servlet.context.tempdir");
+		ServletContext servletContext = this.getServletConfig().getServletContext();
+		File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
 		factory.setRepository(repository);
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		String filename = "";
@@ -51,10 +49,8 @@ public class DouploadServlet extends HttpServlet {
 
 				} else {
 					filename = new String(item.getName().getBytes(), "utf-8");
-					filename = filename.substring(
-							filename.lastIndexOf("\\") + 1, filename.length());
-					File uploadFile = new File(SystemConfig.SAVE_FILE_PATH
-							+ "/" + filename);
+					filename = filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
+					File uploadFile = new File(SystemConfig.SAVE_FILE_PATH + "/" + filename);
 					InputStream in = item.getInputStream();
 					FileOutputStream fos = new FileOutputStream(uploadFile);
 					int len;
@@ -64,7 +60,7 @@ public class DouploadServlet extends HttpServlet {
 					fos.close();
 					in.close();
 					item.delete();
-					MysqlConnector.insertFileTask(filename,SystemConfig.TASK_INIT);
+					// MysqlConnector.insertFileTask(filename,SystemConfig.TASK_INIT);
 				}
 			}
 		} catch (Exception e) {
@@ -73,6 +69,11 @@ public class DouploadServlet extends HttpServlet {
 		// 解析文件
 		FileTasker.addFile(filename);
 		// 返回
+
+		List<String> productIdList = ExcelReaderTool.readFirstColumn(filename);
+		for (String productId : productIdList) {
+			MysqlConnector.insertPhoto(productId);
+		}
 		response.setContentType("text/plain;charset=utf-8");
 		PrintWriter writer = response.getWriter();
 		writer.println("Finished uploading files!");

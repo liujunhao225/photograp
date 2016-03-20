@@ -40,15 +40,6 @@
 	<table id="jqGrid"></table>
 	<div id="jqGridPager"></div>
 	<script type="text/javascript">
-		function redirectToPhotoList(node) {
-			$(node).parent().click();
-			var grid = $("#jqGrid");
-			var currentPage = $(".ui-pg-input").val();
-			var rowKey = grid.jqGrid('getGridParam', "selrow");
-
-			window.location.href = '/task_photo_list.html?taskId=' + rowKey;
-		}
-
 		function stateFormatter(cellValue, options, cellObject) {
 			if ("A" == cellValue) {
 				return "下载中"
@@ -106,9 +97,7 @@
 		}
 
 		function menuFormatter(cellValue, options, cellObject) {
-
-			//查看图片连接
-			var photoUrl = "<a class='menucls' href='###' onClick='redirectToPhotoList(this);'>查看图片</a>";
+			
 			//生成文件连接
 			var makeFileUrl = "<a class='menucls' href='###' onClick='makeExcel(this);'>生成文件</a> ";
 			//下载文件连接
@@ -117,11 +106,11 @@
 			if ("A" == cellValue || "D" == cellValue) {
 				return "不可操作"
 			} else if ("B" == cellValue) {
-				return photoUrl + makeFileUrl;
+				return  makeFileUrl;
 			} else if ("C" == cellValue) {
-				return photoUrl + makeFileUrl + downloadUrl;
+				return  makeFileUrl + downloadUrl;
 			} else if ("E" == cellValue) {
-				return photoUrl + makeFileUrl;
+				return makeFileUrl;
 			} else {
 				return "";
 			}
